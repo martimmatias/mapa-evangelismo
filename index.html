@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f1e8" />
+    <meta name="description" content="Explore Portugal’s districts, concelhos and freguesias on interactive boundary maps." />
+    <title>Portugal Atlas — districts, concelhos and freguesias</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="district-geometry.js" defer></script>
+    <script src="census-data.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#map">Skip to the map</a>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Portugal Atlas home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span>Portugal <span class="brand-light">Atlas</span></span>
+      </a>
+      <span class="header-note">A place, in three layers</span>
+    </header>
+
+    <main id="top" class="page-shell">
+      <section class="intro" aria-labelledby="page-title">
+        <div class="intro-copy">
+          <p class="eyebrow"><span class="eyebrow-line"></span> NATIONAL MAP · 01</p>
+          <h1 id="page-title">Portugal,<br /><em>district by district.</em></h1>
+          <p class="intro-text" id="page-intro">Each mainland district is drawn from official boundary geometry and keeps its real position and proportions. Choose a shape to inspect it.</p>
+        </div>
+        <div class="map-key" aria-label="Map totals">
+          <div><strong id="map-total-primary">18</strong><span id="map-primary-label">Mainland<br />districts</span></div>
+          <span class="key-divider" aria-hidden="true"></span>
+          <div><strong id="map-total-secondary">2</strong><span id="map-secondary-label">Autonomous<br />regions</span></div>
+        </div>
+      </section>
+
+      <nav class="level-nav" aria-label="Map levels">
+        <div class="level-step is-current" aria-current="step">
+          <span class="step-number">01</span><span>Districts</span>
+        </div>
+        <span class="level-connector" aria-hidden="true"></span>
+        <div class="level-step is-upcoming"><span class="step-number">02</span><span>Concelhos</span></div>
+        <span class="level-connector" aria-hidden="true"></span>
+        <div class="level-step is-upcoming"><span class="step-number">03</span><span>Freguesias</span></div>
+      </nav>
+
+      <section id="map" class="map-section" aria-labelledby="map-heading">
+        <div class="map-heading">
+          <div>
+            <p class="section-kicker" id="map-kicker">THE FIRST LAYER</p>
+            <h2 id="map-heading">Select a district</h2>
+          </div>
+          <div class="map-actions">
+            <button id="back-button" class="back-button" type="button" hidden>← Back to Portugal</button>
+            <p class="map-hint"><span class="hint-dot" aria-hidden="true"></span><span id="map-hint-text">Select a district · scroll map sideways on small screens</span></p>
+          </div>
+        </div>
+
+        <div class="map-layout">
+          <div class="map-column">
+            <div class="map-frame" tabindex="0" aria-label="Scrollable district map of Portugal">
+              <svg id="portugal-map" class="portugal-map" viewBox="0 0 830 760" role="group" aria-labelledby="svg-title svg-description">
+                <title id="svg-title">Portugal by district</title>
+                <desc id="svg-description">The eighteen mainland districts are individual CAOP boundary silhouettes drawn in geographic position and at a shared scale. Select a district shape. The Azores and Madeira are shown in separate illustrative insets.</desc>
+                <text id="svg-region-label" class="svg-region-label" x="48" y="20">CONTINENTAL PORTUGAL</text>
+                <g id="district-tiles"></g>
+                <g id="island-insets"></g>
+                <path class="map-baseline" d="M48 744H782" />
+                <text id="map-note" class="map-note" x="48" y="758">MAINLAND DISTRICTS SHARE ONE SCALE · ISLAND INSETS NOT TO SCALE</text>
+              </svg>
+            </div>
+            <div class="map-legend" id="map-legend" aria-label="Relative evangelical share by area">
+              <div class="map-legend-heading">
+                <span class="map-legend-title" id="map-legend-title">RELATIVE EVANGELICAL SHARE · DISTRICTS</span>
+                <span class="map-legend-count" id="map-legend-count">18 areas</span>
+              </div>
+              <div class="map-legend-scale" id="map-legend-scale" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <div class="map-legend-labels">
+                <span>Lower <strong id="map-legend-min">—</strong></span>
+                <span>Higher <strong id="map-legend-max">—</strong></span>
+              </div>
+              <p class="map-legend-note" id="map-legend-note">Colors show relative rank among visible areas. Hover for the exact percentage; gray means no matching 2021 figure.</p>
+            </div>
+          </div>
+
+          <aside class="selection-panel" aria-live="polite" aria-atomic="true">
+            <div class="selection-topline">
+              <span class="selection-index" id="selection-index">PT</span>
+              <span class="selection-kind" id="selection-kind">NATIONAL TOTAL</span>
+            </div>
+            <div class="selection-body" id="selection-body">
+              <p class="selection-overline">CENSOS 2021 · RESIDENTS AGED 15+</p>
+              <h3 id="selection-name">Portugal</h3>
+              <p class="selection-copy" id="selection-copy">The overall count for Portugal. Hover over a district to see its figures.</p>
+              <div class="census-stats" aria-label="Protestant and Evangelical census statistics">
+                <div class="census-stat-row">
+                  <span>Protestante/Evangélica</span>
+                  <strong id="census-count">186,832</strong>
+                </div>
+                <div class="census-share-row">
+                  <strong id="census-share">2.13%</strong>
+                  <span>of residents aged 15+</span>
+                </div>
+                <p class="census-denominator" id="census-denominator">Total population aged 15+: 8,781,900</p>
+              </div>
+            </div>
+            <div class="selection-footer">
+              <span class="selection-marker" aria-hidden="true"></span>
+              <span id="selection-region">2021 Census · residents aged 15+</span>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <footer class="page-footer">
+        <p>Boundaries follow the <a href="https://www.dgterritorio.gov.pt/atividades/cartografia/cartografia-tematica/caop?language=pt" target="_blank" rel="noreferrer">Official Administrative Charter of Portugal (CAOP)</a>. Census figures use INE’s <a href="https://www.ine.pt/xportal/xmain?xpid=INE&amp;xpgid=ine_indicadores&amp;indOcorrCod=0011644&amp;contexto=bd&amp;selTab=tab2" target="_blank" rel="noreferrer">Censos 2021 religion table</a>; the category combines Protestant and Evangelical self-identification among residents aged 15 and over. A parish boundary without a matching 2021 census code is marked as unavailable, because the INE did not publish a separate 2021 figure for that geography. Concelho and freguesia boundaries load on selection from the <a href="https://sig.lneg.pt/server/rest/services/geoPortal/CAOP_DGT/MapServer" target="_blank" rel="noreferrer">public CAOP map service</a>, so those views need an internet connection.</p>
+        <span>PORTUGAL · 01 / 03</span>
+      </footer>
+    </main>
+
+    <div id="map-tooltip" class="map-tooltip" role="tooltip" aria-hidden="true" hidden>
+      <span class="map-tooltip-kicker">CENSOS 2021 · RESIDENTS AGED 15+</span>
+      <strong class="map-tooltip-name" id="map-tooltip-name"></strong>
+      <div id="map-tooltip-stats">
+        <div class="map-tooltip-row"><span>Protestante/Evangélica</span><strong id="map-tooltip-count"></strong></div>
+        <div class="map-tooltip-row"><span>Share of residents</span><strong id="map-tooltip-share"></strong></div>
+      </div>
+      <p class="map-tooltip-unavailable" id="map-tooltip-unavailable" hidden>No separate figure is available for this boundary in the 2021 Census.</p>
+    </div>
+  </body>
+</html>
